@@ -8,7 +8,7 @@ CREATE TABLE users (
   username VARCHAR (100) UNIQUE NOT NULL,
   email VARCHAR (100) UNIQUE NOT NULL,
   password VARCHAR (250) NOT NULL,
-  token VARCHAR (16)
+  token VARCHAR (100)
 );
 
 CREATE TABLE posts (
@@ -31,3 +31,6 @@ INSERT INTO users (username, email, password) VALUES
 
 INSERT INTO posts (author, title, body) VALUES
 (1, 'bunny', 'Marshmello'), (2, 'dog', 'Chai'), (1, 'cat', 'Pixel');
+
+INSERT INTO comments (author, post_id, title, body) VALUES
+(1, 1, 'abra', 'kadabra'), (2, 2, 'hocus', 'pocus');
