@@ -1,8 +1,9 @@
 const express = require('express');
 const PostRouter = express.Router();
 const PostService = require('../services/post');
+const {check, verify}= require('../services/authentication');
 
-PostRouter.post('/', (req, res) => { //Private
+PostRouter.post('/', check, verify,  (req, res) => { //Private
     
     console.log('create post');
 
@@ -65,7 +66,7 @@ PostRouter.get('post/:post_id/comments/:comment_id',(req, res) => {
     
 });
 
-PostRouter.put('/:post_id', (req, res) => { // Private
+PostRouter.put('/:post_id', check, verify, (req, res) => { // Private
     
     console.log('edit post by id');
 
@@ -83,7 +84,7 @@ PostRouter.put('/:post_id', (req, res) => { // Private
 
 });
 
-PostRouter.delete('/:post_id', (req, res) => { // Private
+PostRouter.delete('/:post_id', check, verify, (req, res) => { // Private
     
     console.log('delete post by id');
 

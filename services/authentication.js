@@ -2,7 +2,7 @@ const uuid = require('uuid/v1');
 const bcrypt = require('bcrypt');
 const UserService = require('./user');
 
-const login = (req, res, next) => {
+const login = (req, res)=> {
 
     const {username, email, password} = req.body
     

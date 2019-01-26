@@ -1,8 +1,10 @@
 const express = require('express');
 const CommentRouter = express.Router();
 const CommentService = require('../services/comment');
+const {check, verify}= require('../services/authentication');
 
-CommentRouter.post('/', (req, res) => {
+
+CommentRouter.post('/', check, verify, (req, res) => {
 
     console.log('make comment');
 
@@ -34,7 +36,7 @@ CommentRouter.get ('comment/:comment_id', (req, res) => {
 
 });
 
-CommentRouter.put('/:comment_id', (req, res) => {
+CommentRouter.put('/:comment_id', check, verify, (req, res) => {
     
     console.log('edit comment')
 
@@ -52,7 +54,7 @@ CommentRouter.put('/:comment_id', (req, res) => {
 
 });
 
-CommentRouter.delete('/:comment_id', (req, res) => {
+CommentRouter.delete('/:comment_id', check, verify, (req, res) => {
     
     console.log('delete comment')
 

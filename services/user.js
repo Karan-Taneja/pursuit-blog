@@ -39,7 +39,7 @@ UserService.readUserNotByID = (username=null, email=null, author=null) => {
 
     if(username) return db.one('SELECT * FROM users WHERE users.username=${username}', {username})
     else if(email) return db.one('SELECT * FROM users WHERE users.email=${email}', {email})
-    else if(username) return db.one('SELECT * FROM users WHERE users.username=${author}', {author});
+    else if(author) return db.one('SELECT * FROM users WHERE users.username=${author}', {author});
 
 };
 

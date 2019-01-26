@@ -1,15 +1,19 @@
 const express = require('express');
 const UserRouter = express.Router();
+const bcrypt = require('bcrypt');
 
 const UserService = require('../services/user');
-const Authentication = require('../services/authentication');
+const {login, verify, check}= require('../services/authentication');
 
 UserRouter.post ('/', (req, res) => {
     
     console.log('create user');
     
     const {username, email, password} = req.body;
-    UserService.create(username, email, password)
+
+    const encryptedPass = bcrypt.hash(password);
+
+    UserService.create(username, email, encryptedPass)
         .then(() => {
             res.status(200)
             res.json({'messages': 'user successfully created'})
@@ -36,7 +40,7 @@ UserRouter.get ('/:user_id', (req, res) => {
         });
 });
 
-UserRouter.post ('/login', (req, res) => { //requires bcrypt & uuid?
+UserRouter.post ('/login', (req, res) => {
     
     console.log('login as user');
 
@@ -53,14 +57,16 @@ UserRouter.post ('/login', (req, res) => { //requires bcrypt & uuid?
 
 });
 
-UserRouter.put('/:user_id', (req, res) => { /* Private */
+UserRouter.put('/:user_id', check, verify, (req, res) => { /* Private */
     
     console.log('updated user by id');
 
     const {id} = req.params;
     const {username, email, password} = req.body;
 
-    UserService.update(id, username, email, password)
+    const encryptedPass = bcrypt.hash(password);
+
+    UserService.update(id, username, email, encryptedPass)
         .then(data => {
             console.log(data)
             res.json({'data':data.stringify()})
@@ -70,7 +76,7 @@ UserRouter.put('/:user_id', (req, res) => { /* Private */
         })
 });
 
-UserRouter.delete('/:user_id', (req, res) => { /* Private */
+UserRouter.delete('/:user_id', check, verify, (req, res) => { /* Private */
     
     console.log('delete user');
 
@@ -100,7 +106,7 @@ UserRouter.get('/:user_id/posts/', (req, res) => {
         });
 });
 
-UserRouter.get('/:user_id/posts/:post_id',(req, res) => {
+UserRouter.get('/:user_id/posts/:post_id', (req, res) => {
     
     console.log('get specific post by user');
 
@@ -130,7 +136,7 @@ UserRouter.get('/:user_id/comments/',(req, res) => {
         })
 });
 
-UserRouter.get('/:user_id/comments/:comment_id',(req, res) => {
+UserRouter.get('/:user_id/comments/:comment_id', (req, res) => {
     
     console.log('get specific comment by user');
 
