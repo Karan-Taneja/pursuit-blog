@@ -2,7 +2,9 @@ const uuid = require('uuid/v1');
 const bcrypt = require('bcrypt');
 const UserService = require('./user');
 
-const login = (username=null, email=null, password) => {
+const login = (req, res, next) => {
+
+    const {username, email, password} = req.body
     
     UserService.readUserNotByID(username, email)
         .then(data => {
@@ -17,7 +19,12 @@ const login = (username=null, email=null, password) => {
         });
 }
 
-const verify = (id=null, username=null, author=null, token) => {
+const verify = (req, res, next) => {
+
+    const {id} = req.params
+    const {username, author} = req.body
+    const {token} = req.headers
+
     if(id){
         UserService.readUser(id)
             .then(data => {
@@ -25,21 +32,22 @@ const verify = (id=null, username=null, author=null, token) => {
                     res.json({'error':'not logged in'});
                 }
                 else{
-                    return true;
+                    next();
                 };
             })
             .catch(error => {
                 res.json({'error': error.stringify()});
             })
     }
-    else if(username || email){
+    else if(username || author){
         UserService.readUserNotByID(username, email)
         .then(data => {
             if(data.token !== token){
-                res.json({'error':'not logged in'});
+                res.status(401)
+                res.json({'message' : 'client not authorized'})
             }
             else{
-                return true;
+                next();
             };
         })
         .catch(error => {
@@ -48,5 +56,14 @@ const verify = (id=null, username=null, author=null, token) => {
     }
 }
 
-module.exports = {login, verify};
+const check = (req, res, next) => {
+
+    if (req.headers.token) next();
+    else{
+        res.status(401)
+        res.json({'message' : 'client not authorized'})
+    }
+}
+
+module.exports = {login, verify, check};
 

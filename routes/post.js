@@ -65,7 +65,7 @@ PostRouter.get('post/:post_id/comments/:comment_id',(req, res) => {
     
 });
 
-PostRouter.update('/:post_id', (req, res) => { // Private
+PostRouter.put('/:post_id', (req, res) => { // Private
     
     console.log('edit post by id');
 

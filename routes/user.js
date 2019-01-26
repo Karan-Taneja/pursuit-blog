@@ -12,7 +12,7 @@ UserRouter.post ('/', (req, res) => {
     UserService.create(username, email, password)
         .then(() => {
             res.status(200)
-            res.json({'messages': 'success'})
+            res.json({'messages': 'user successfully created'})
         })
         .catch(error => {
             res.json({'error': error.stringify()})
@@ -48,7 +48,7 @@ UserRouter.post ('/login', (req, res) => { //requires bcrypt & uuid?
             res.json({'message':'successfully logged in'});
         })
         .catch(error => {
-            res.json({'error':error.stringify});
+            res.json({'error':error.stringify()});
         });
 
 });

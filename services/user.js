@@ -35,12 +35,13 @@ UserService.readUser = (id) => {
     return db.one('SELECT * FROM users WHERE users.id=${id}', {id})
 };
 
-UserService.readUserNotByID = (username=null, email=null) => {
+UserService.readUserNotByID = (username=null, email=null, author=null) => {
 
     if(username) return db.one('SELECT * FROM users WHERE users.username=${username}', {username})
-    if(email) return db.one('SELECT * FROM users WHERE users.email=${email}', {email})
+    else if(email) return db.one('SELECT * FROM users WHERE users.email=${email}', {email})
+    else if(username) return db.one('SELECT * FROM users WHERE users.username=${author}', {author});
 
-}
+};
 
 UserService.readUsersPost = (id, post_id) => {
     return db.one('SELECT * FROM users JOIN posts ON posts.author=users.id WHERE users.id=${id} AND posts.id=${post_id}', {id, post_id})
